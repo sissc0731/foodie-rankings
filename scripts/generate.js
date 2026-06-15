@@ -1,14 +1,33 @@
 const fs=require('fs'),path=require('path'),today=new Date().toISOString().slice(0,10),slug=today;
-const feed=JSON.parse(fs.readFileSync(path.join(__dirname,'..','feed.json'),'utf8'));
-if(feed.posts.find(p=>p.slug===slug)){console.log('Exists');process.exit(0)}
-const articles=[
-{title:'北京必吃榜：本地人真正会去的10家馆子，不是游客店',tag:'北京美食',intro:'三里屯和南锣鼓巷的网红店本地人基本不去。真正的北京味道藏在胡同里、老社区旁、开了二三十年的老店里。这10家是本地人用舌头投票出来的，和大众点评的游客排名完全不同。',sections:[{title:'🥟 老北京小吃',body:'护国寺小吃（总店）：豌豆黄豆汁儿驴打滚，几十个品种一站式吃全北京早点。注意要去护国寺街那家总店，分店出品不稳。姚记炒肝：炒肝+包子是北京早餐的灵魂组合，黏糊糊的蒜香卤汁拌包子吃才是正确的打开方式。爆肚冯：开了三十年的老店，爆肚脆爽蘸麻酱吃，北京人对麻酱的热爱在这里体现得淋漓尽致。'},{title:'🍖 涮肉和烤鸭',body:'聚宝源（牛街总店）：手切鲜羊肉是招牌，比机切肉片厚实有嚼劲。上午10点就排队，牛街一整条街都是清真美食聚集地。大董烤鸭：贵但品质稳。全聚德：游客多，但前门总店的老店氛围是独一无二的。本地人日常吃烤鸭一般去便宜坊或者小区楼下的烤鸭店。'},{title:'🍜 藏在小巷里的宝藏店',body:'张妈妈特色川味馆：北京川菜天花板，不是精致路线是苍蝇馆子的味道和价格。钵钵鸡和双椒兔丁是必点。铃木食堂：藏在胡同里的日式小食堂，牛肉饭和炸鸡块治愈了很多北漂的胃。营业时间看老板心情，去之前最好打电话确认。'}]},
-{title:'上海美食地图：从本帮菜到弄堂小吃的味觉路线',tag:'上海美食',intro:'上海不只是小笼包和生煎。弄堂里的葱油拌面、秋天的蟹粉面、冬天的腌笃鲜——跟着时令吃的才是真正上海味道。',sections:[{title:'🥟 必须要吃的本帮菜',body:'老正兴菜馆：百年老店，油爆虾和草头圈子是检验本帮菜功力的标准。人和馆：蟹粉捞饭一年只卖秋冬两季，蟹粉现拆现做鲜到掉眉毛。德兴馆：焖蹄面和各种浇头面，本地大爷大妈天天排队。本帮菜的灵魂是浓油赤酱+鲜甜口味。'},{title:'🍜 面食和小吃',body:'佳家汤包：皮薄汤多，比南翔馒头店好吃十倍还不排队。大壶春生煎：上海生煎分两大流派——大壶春的全发面派和小杨生煎的薄皮派，各有拥护者。葱油拌面在上海随便一家弄堂口的小面馆都好吃，葱油炸到焦黑香气四溢。国际饭店蝴蝶酥：排队排到天荒地老，但真的值。'},{title:'🌏 上海的国际化美食',body:'上海的日料水平全国最高——古北区域聚集了大量日本人开的正宗日料店，不是连锁的那种。法租界里的法餐厅可以和巴黎媲美。在上海外食不是\"改善伙食\"，是生活方式。很多好店藏在老洋房里不好找——跟着本地朋友的推荐走，比大众点评靠谱。'}]},
-{title:'成都苍蝇馆子Top10：不是网红店，是成都人自己吃的店',tag:'成都美食',intro:'成都人的嘴很刁——不好吃的店活不过三个月。能在成都开十年以上的店，每一家都有自己的绝活。不用排队3小时的网红店，这些才是成都人下了班真正会去吃的。',sections:[{title:'🌶 火锅和串串',body:'成都火锅和重庆火锅最大的区别：重庆是牛油重辣，成都是清油多香。小龙坎和大龙燚是游客店，本地人去的是一些连招牌都看不清的老店。玉林片区的\"无名火锅\"开了二十年还是只有几张桌子。串串香要和冰粉搭配吃——辣到满头大汗来一碗冰粉，成都夏天最爽的体验。'},{title:'🍜 面食和小吃',body:'担担面的灵魂是芝麻酱+红油+芽菜碎，搅拌均匀后每一根面都挂满酱汁。甜水面是成都独有的——粗面条配甜辣酱汁，口感像吃橡皮糖。兔头分麻辣和五香两种口味，吃兔头是技术活会吃的人能把骨头啃得干干净净。蛋烘糕是成都人从小吃到大的街头小吃，外脆里软趁热吃。'},{title:'🏠 小区周边找美食的方法',body:'成都最好吃的店不在商圈，在居民区。方法：跟着穿拖鞋的大爷大妈走，他们去哪你就去哪。或者用大众点评筛\"收录10年以上\"的店，这种店能开十年一定有过人之处。不要迷信排队——有些是雇人排的。真正的老店不需要营销，街坊邻居天天来吃就是最好的广告。'}]},
-{title:'全国嗦粉地图：一碗粉一座城，吃过5碗才算合格的吃货',tag:'全国美食',intro:'中国有多少个省份就有多少种粉。米粉、河粉、酸粉、卤粉、卷粉——同一袋米在不同地方变成了完全不同的食物。看看你吃过几种？',sections:[{title:'🍜 南方粉系',body:'桂林米粉：卤水是灵魂，干捞比汤粉更正宗，配酸豆角花生可以说是完美。柳州螺蛳粉：爱的人极爱恨的人闻到就受不了，酸笋是螺蛳粉的灵魂也是争议的焦点。湖南米粉：分圆粉和扁粉两大流派，常德牛肉粉是圆粉派的代表。云南过桥米线：仪式感最强，滚烫的鸡汤把生肉片烫熟的过程是一种享受。'},{title:'🍝 西南和岭南粉系',body:'贵州羊肉粉：水城和遵义的羊肉粉各有千秋。汤清肉嫩辣椒香，冬天早上嗦一碗暖一天。广东肠粉：分广式肠粉和潮式肠粉两大流派。广式薄如蝉翼配甜酱油，潮式厚实有嚼劲加菜脯粒。海南粉：配料极其丰富，花生炸面筋牛肉干酸菜葱花，拌匀了每一口都有不同的口感组合。'},{title:'🍲 粉的灵魂伴侣',body:'米粉好不好吃一半看汤底。筒骨汤、鸡汤、牛骨汤是三大基础汤底，熬得好不好决定了这碗粉的下限。另一半是配料——酸豆角花生炸黄豆葱花辣椒香菜，少一样都不完整。吃粉也要讲时令：夏天吃凉拌粉冬天吃热汤粉，跟着季节走。哦对，不要忘记喝汤——喝完汤才算真正吃完这碗粉。'}]},
+const fp=path.join(__dirname,'..','feed.json');
+const feed=JSON.parse(fs.readFileSync(fp,'utf8'));
+if(!feed.posts)feed.posts=[];
+if(feed.posts.find(p=>p.slug===slug)){console.log('Already exists');process.exit(0)}
+
+// Content pools - 8 groups cycling through dates
+const pools=[
+[{t:'效率翻倍！这3个小技巧让你的工作流更顺畅',tag:'效率技巧',d:'减少切换、批处理、自动化——3个简单技巧立刻提升效率'}],
+[{t:'2026年必备的免费工具推荐',tag:'工具推荐',d:'精心挑选的实用免费工具，日常办公和创作都能用上'}],
+[{t:'为什么你总觉得时间不够用？',tag:'时间管理',d:'不是你不够努力，而是方法需要调整。重新规划你的时间分配'}],
+[{t:'工作学习两不误的小窍门',tag:'学习方法',d:'高效人士都在用的学习方法，每天只需投入少量时间'}],
+[{t:'比勤奋更重要的是方法',tag:'思维方式',d:'换个角度思考问题，可能会发现之前困扰你的事其实很简单'}],
+[{t:'减少决策疲劳的日常习惯',tag:'习惯养成',d:'每天做太多小决定会消耗精力，建立习惯让大脑自动运行'}],
+[{t:'让生活更有条理的整理术',tag:'生活技巧',d:'整理不只是打扫房间，更是整理思绪和提升幸福感的方式'}],
+[{t:'数字时代如何保持专注',tag:'专注力',d:'手机和社交媒体在偷走你的注意力，教你几招夺回主动权'}],
 ];
-const idx=(new Date().getDate()-1)%articles.length,a=articles[idx];
-feed.posts.unshift({slug,date:today,title:a.title,tag:a.tag,intro:a.intro,sections:a.sections});
-feed.updated=today;fs.writeFileSync(path.join(__dirname,'..','feed.json'),JSON.stringify(feed,null,2));
-const html=`<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${a.title}</title><style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{--bg:#fafafa;--card:#fff;--text:#1a1a2e;--t2:#555;--accent:#dc2626;--border:#e5e7eb;--r:12px}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;background:var(--bg);color:var(--text);line-height:1.9;font-size:16px}.container{max-width:750px;margin:0 auto;padding:0 20px}header{background:linear-gradient(135deg,#dc2626,#f97316);color:#fff;padding:36px 0;margin-bottom:24px}header a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.9rem}header h1{font-size:1.5rem;margin-top:8px;line-height:1.4}.post{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px}.post .intro{font-size:1rem;color:var(--t2);margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);line-height:1.8}.section{margin-bottom:24px}.section h3{font-size:1.05rem;margin-bottom:6px;color:var(--accent)}.section p{color:var(--t2);font-size:.92rem;line-height:1.9}footer{text-align:center;padding:24px;color:#999;font-size:.75rem}@media(max-width:600px){.post{padding:18px}}</style></head><body><header><div class="container"><a href="../index.html">← 首页</a><h1>${a.title}</h1></div></header><main class="container"><article class="post"><p class="intro">${a.intro}</p>${a.sections.map(s=>`<div class="section"><h3>${s.title}</h3><p>${s.body}</p></div>`).join('')}</article></main><footer><p>🍜 美食排行 · 每日更新</p></footer></body></html>`;
-fs.writeFileSync(path.join(__dirname,'..','posts',slug+'.html'),html);console.log('OK');
+
+const idx=(new Date().getDate()-1)%pools.length;
+const pool=pools[idx];
+const titles=['每日分享 | '+today,'实用技巧 | '+today,'效率提升 | '+today,'好物推荐 | '+today];
+const title=titles[new Date().getDate()%titles.length];
+
+feed.posts.unshift({slug,date:today,title:title,items:pool});
+feed.updated=today;
+fs.writeFileSync(fp,JSON.stringify(feed,null,2));
+
+// Create post HTML
+const dir=path.join(__dirname,'..','posts');
+if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});
+const h=`<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${title}</title><meta name="description" content="${pool.map(i=>i.t).join('、')}"><style>body{font:16px -apple-system,sans-serif;background:#fafafa;color:#1a1a2e;line-height:1.8;margin:0;padding:16px}.c{max-width:700px;margin:0 auto}article{background:#fff;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}h1{font-size:1.3rem;margin:0 0 4px}.date{font-size:.8rem;color:#666;margin-bottom:20px}.item{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #eee}.item h2{font-size:1rem;margin:0 0 4px}.item p{font-size:.88rem;color:#555}.tag{display:inline-block;background:#eff6ff;color:#2563eb;font-size:.68rem;padding:2px 8px;border-radius:10px;margin-left:6px}footer{text-align:center;padding:20px;color:#999;font-size:.72rem}</style></head><body><div class="c"><article><h1>${title}</h1><p class="date">📅 ${today}</p>${pool.map(i=>'<div class="item"><h2>'+i.t+' <span class="tag">'+i.tag+'</span></h2><p>'+i.d+'</p></div>').join('')}</article></div><footer>每日自动更新</footer></body></html>`;
+fs.writeFileSync(path.join(dir,slug+'.html'),h);
+console.log('Generated:',title);
